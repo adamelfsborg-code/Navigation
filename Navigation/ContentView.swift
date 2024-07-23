@@ -1,33 +1,32 @@
 import SwiftUI
 
+struct DetailView: View {
+    var number: Int
+    @Binding var path: [Int]
+    
+    var body: some View {
+        VStack {
+            
+            NavigationLink("You selected number: \(number)", value: Int.random(in: 0...1000))
+                .navigationTitle("Num - \(number)")
+                .toolbar {
+                    Button("Reset") {
+                        path.removeAll()
+                    }
+                }
+        }
+        
+    }
+}
+
 struct ContentView: View {
-    @State private var path = NavigationPath()
+    @State private var path = [Int]()
     var body: some View {
         NavigationStack(path: $path) {
-            List {
-                ForEach(1..<5) { i in
-                    NavigationLink("Select number: \(i)", value: i)
+            DetailView(number: 0, path: $path)
+                .navigationDestination(for: Int.self) { selection in
+                    DetailView(number: selection, path: $path)
                 }
-                ForEach(1..<5) { i in
-                    NavigationLink("Select string: \(i)", value: String(i))
-                }
-            }
-            .toolbar {
-                Button("Push random number") {
-                    path.append(Int.random(in: 0...1000))
-                }
-                
-                Button("Push random string") {
-                    path.append(String(Int.random(in: 0...1000)))
-                }
-            }
-            .navigationDestination(for: Int.self) { selection in
-                Text("You selected number \(selection)")
-            }
-            .navigationDestination(for: String.self) { selection in
-                Text("You selected string \(selection)")
-            }
-        
         }
     }
 }
