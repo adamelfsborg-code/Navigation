@@ -1,39 +1,26 @@
 import SwiftUI
 
-struct DetailView: View {
-    let person: Person
-    
-    var body: some View {
-        Text("\(person.name)")
-    }
-    
-    init(person: Person) {
-        print("Creating detail view for: \(person.id)")
-        self.person = person
-    }
-}
-
-struct Person: Hashable, Identifiable {
-    let id = UUID()
-    var name: String
-}
-
 struct ContentView: View {
-    @State var persons = [Person]()
+    @State private var path = [Int]()
+    
     var body: some View {
-        NavigationStack {
-            List(persons) { person in
-                NavigationLink("Tap row \(person.name)", value: person)
-            }
-            .navigationDestination(for: Person.self) { selection in
-                DetailView(person: selection)
-            }
-            .toolbar {
-                Button("Add person") {
-                    let p = Person(name: "Adam \(Int.random(in: 1..<10))")
-                    persons.insert(p, at: 0 )
+        NavigationStack(path: $path) {
+            VStack {
+                Button("Show me number: 32") {
+                    path = [32]
+                }
+                Button("Show me number: 64") {
+                    path.append(64)
+                }
+                
+                Button("Show me 32 then 64") {
+                    path = [32, 64]
                 }
             }
+            .navigationDestination(for: Int.self) { selection in
+                Text("Moved to path \(selection)")
+            }
+        
         }
     }
 }
