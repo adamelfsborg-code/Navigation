@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Navigation
-//
-//  Created by Adam Elfsborg on 2024-07-23.
-//
-
 import SwiftUI
 
 struct ContentView: View {
